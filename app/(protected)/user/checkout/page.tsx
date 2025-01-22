@@ -14,9 +14,10 @@ import { useCurrentUser } from "@/lib/hooks";
 import { IUserAddress } from "@/types";
 import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import { toast } from "sonner";
 const PAYMENT_METHODS = [
   {
     id: "CASH_ON_DELIVERY",
@@ -35,6 +36,7 @@ const PAYMENT_METHODS = [
 
 const Checkout = () => {
   const user = useCurrentUser();
+  const router = useRouter();
   const { data, loading, error } = useQuery(GET_USERS_ADDRESS, {
     variables: { userId: user?.id },
   });
@@ -71,7 +73,7 @@ const Checkout = () => {
     }));
 
     try {
-      const { data } = await addOrder({
+      await addOrder({
         variables: {
           input: {
             userId: user?.id,
@@ -85,10 +87,14 @@ const Checkout = () => {
         },
       });
 
-      console.log("Order created successfully:", data);
-      // Handle successful order creation (e.g., redirect to order confirmation page)
+      toast.success("Order created successfully");
+      router.push(`/user/orders/`);
     } catch (error) {
-      console.error("Error creating order:", error);
+      if (error instanceof Error) {
+        toast.error(`Error creating order: ${error.message}`);
+      } else {
+        toast.error("An unknown error occurred while creating the order");
+      }
     }
   };
 
