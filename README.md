@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MediGadget Platform
 
-## Getting Started
+Welcome to the MediGadget Platform, a multi-service e-commerce platform designed for the sale of medical gadgets and ambulance booking services. This platform integrates modern web technologies to provide a seamless user experience.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Contributing](#contributing)
+- [License](#license)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **User Registration and Login**: Secure authentication with email and social media accounts.
+- **Product Browsing and Purchase**: Browse, filter, and purchase medical gadgets.
+- **Ambulance Booking**: Search and book available ambulances based on location.
+- **Responsive Design**: Accessible on both web and mobile devices.
+- **Secure Transactions**: Integrated payment gateway for secure financial transactions.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technology Stack
 
-## Learn More
+- **Frontend**: React, Next.js
+- **Backend**: Node.js, Apollo Server
+- **Database**: PostgreSQL via Prisma
+- **State Management**: Redux Toolkit
+- **Validation**: Zod
+- **Email Services**: Nodemailer
+- **Authentication**: NextAuth.js
 
-To learn more about Next.js, take a look at the following resources:
+## Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To set up the MediGadget platform locally, follow these steps:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/khanshifaul/medigadget.git
+   cd medigadget
+   ```
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Configure Environment Variables**:
 
-## Deploy on Vercel
+   Create a .env file in the root directory and set the necessary environment variables.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   DATABASE_URL=your_database_url
+   NEXTAUTH_URL=your_nextauth_url
+   NEXTAUTH_SECRET=your_nextauth_secret
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Run the Development Server:**:
+   ```bash
+   npm run dev
+   ```
+5. **Access the Application:**
+
+   Open your web browser and navigate to http://localhost:3000 to access the MediGadget platform.
+
+6. **Build for Production:**
+
+   Run the following command to build the application for production:
+
+   ```bash
+   npm run build
+   ```
+
+## Usage
+
+- **User Registration and Login**:
+- **Product Browsing and Purchase**:
+- **Ambulance Booking**:
+
+## API Documentation
+
+For detailed API documentation, refer to the [API Documentation](API_DOCS.md).
+
+## Contributing
+
+Contributions are welcome! Please follow the [Contributing Guidelines](CONTRIBUTING.md) for details on how to contribute to this project.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---

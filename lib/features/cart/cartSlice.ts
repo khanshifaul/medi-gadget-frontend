@@ -19,7 +19,8 @@ export interface CartState {
   isOpen: boolean;
 }
 
-const loadCartItemsFromLocalStorage = (): CartItem[] => {
+// Export the function so it can be used in other modules
+export const loadCartItemsFromLocalStorage = (): CartItem[] => {
   if (typeof window !== "undefined") {
     try {
       const serializedCartItems = localStorage.getItem("cartItems");

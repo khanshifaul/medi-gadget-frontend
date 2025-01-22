@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { useCurrentUser } from "@/lib/hooks";
 import { IUser, IUserAddress } from "@/types";
 import { useMutation, useQuery } from "@apollo/client";
+import { Plus } from "lucide-react";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { Input } from "../ui/input";
 
@@ -75,7 +76,7 @@ export const UserProfile = () => {
       address2: "",
       city: "",
       state: "",
-      postcode: "0",
+      postcode: "",
       country: "",
     },
     [UserAddressType.Other]: {
@@ -87,6 +88,9 @@ export const UserProfile = () => {
       country: "",
     },
   });
+
+  const [showOfficeAddress, setShowOfficeAddress] = useState(false);
+  const [showOtherAddress, setShowOtherAddress] = useState(false);
 
   const [updateUserInfo] = useMutation(UPDATE_USER_INFO);
   const [updateUserAddress] = useMutation(UPDATE_USER_ADDRESS);
@@ -115,6 +119,7 @@ export const UserProfile = () => {
       });
       setAddressFormData(updatedAddressFormData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData, addresses]);
 
   const handleEditToggleInfo = () => {
@@ -338,8 +343,26 @@ export const UserProfile = () => {
             className="flex flex-col md:flex-row w-full gap-2"
           >
             {renderAddressFields(UserAddressType.Home)}
-            {renderAddressFields(UserAddressType.Office)}
-            {renderAddressFields(UserAddressType.Other)}
+            {showOfficeAddress && renderAddressFields(UserAddressType.Office)}
+            {showOtherAddress && renderAddressFields(UserAddressType.Other)}
+            <div className="flex flex-col justify-center items-center gap-2 mt-4">
+              {!showOfficeAddress && (
+                <Button
+                  onClick={() => setShowOfficeAddress(true)}
+                  className="flex flex-col w-auto h-auto aspect-square justify-center items-center"
+                >
+                  <Plus className="w-8 h-8" /> <span> Add Office Address</span>
+                </Button>
+              )}
+              {!showOtherAddress && (
+                <Button
+                  onClick={() => setShowOtherAddress(true)}
+                  className="flex flex-col w-auto h-auto aspect-square justify-center items-center"
+                >
+                  <Plus className="w-8 h-8" /> <span> Add Other Address</span>
+                </Button>
+              )}
+            </div>
           </form>
         </div>
       </div>

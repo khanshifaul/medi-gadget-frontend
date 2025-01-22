@@ -15,9 +15,10 @@ import { IUserAddress } from "@/types";
 import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
+
 const PAYMENT_METHODS = [
   {
     id: "CASH_ON_DELIVERY",
@@ -51,6 +52,8 @@ const Checkout = () => {
     useState<string>("CASH_ON_DELIVERY");
   const [notes, setNotes] = useState<string>("");
 
+  const addressRef = useRef<HTMLDivElement>(null);
+
   const selectedAddress = userAddresses.find(
     (address) => address.id === selectedAddressId
   );
@@ -63,6 +66,7 @@ const Checkout = () => {
   const handleSubmit = async () => {
     if (!selectedAddressId) {
       alert("Please select a shipping address.");
+      addressRef.current?.scrollIntoView({ behavior: "smooth" });
       return;
     }
 
@@ -88,7 +92,7 @@ const Checkout = () => {
       });
 
       toast.success("Order created successfully");
-      router.push(`/user/orders/`);
+      router.push("/user/my-orders");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Error creating order: ${error.message}`);
@@ -109,7 +113,7 @@ const Checkout = () => {
                 Checkout Summary
               </div>
               <div className="flex flex-col gap-5">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2" ref={addressRef}>
                   <p className="text-lg font-medium text-nowrap">
                     Shipping Address
                   </p>
@@ -151,7 +155,11 @@ const Checkout = () => {
                       {userAddresses.length === 0 && (
                         <div className="flex items-center space-x-2 shadow-sm border-2 dark:bg-muted p-2 rounded">
                           <RadioGroupItem disabled value="new" id="new" />
-                          <Button variant={"link"} className="p-0 h-auto">
+                          <Button
+                            variant={"link"}
+                            className="p-0 h-auto"
+                            onClick={() => router.push("/user")}
+                          >
                             Add New Address
                           </Button>
                         </div>

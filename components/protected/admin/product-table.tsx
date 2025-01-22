@@ -1,4 +1,5 @@
 "use client";
+import { DELETE_PRODUCT } from "@/app/api/graphql/mutation";
 import { GET_PRODUCTS } from "@/app/api/graphql/queries";
 import DeleteDialog from "@/components/protected/admin/delete-dialog";
 import EditDialog from "@/components/protected/admin/edit-dialog";
@@ -11,12 +12,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { IProduct } from "@/types";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const ProductTable = () => {
+  const router = useRouter();
   const { data, loading, error } = useQuery(GET_PRODUCTS);
+
+  const [deleteProduct] = useMutation(DELETE_PRODUCT, {
+    onCompleted: () => {
+      router.refresh();
+    },
+  });
 
   if (loading) {
     return <div>Loading...</div>;
@@ -29,19 +39,22 @@ const ProductTable = () => {
   const products: IProduct[] = data?.Products || [];
 
   const handleEdit = (id: string) => {
-    // Implement the logic to edit the product with the given id
     console.log(`Editing product with id: ${id}`);
-    // You might want to navigate to an edit page or update the state here
+    // Navigate to an edit page or update the state here
   };
 
   const handleDelete = (id: string) => {
-    // Implement the logic to delete the product with the given id
     console.log(`Deleting product with id: ${id}`);
-    // You might want to call an API or update the state here
+    deleteProduct({ variables: { id } })
+      .then(() => {
+        toast.success("Product deleted successfully");
+      })
+      .catch((error) => {
+        toast.error("Error deleting product:", error);
+      });
   };
 
   const prefetchAction = () => {
-    // Implement any prefetch logic if needed
     console.log("Prefetching data...");
   };
 

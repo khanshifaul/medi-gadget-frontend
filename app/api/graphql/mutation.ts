@@ -68,6 +68,12 @@ export const ADD_PRODUCT = gql`
   }
 `;
 
+export const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($deleteProductId: String!) {
+    deleteProduct(id: $deleteProductId)
+  }
+`;
+
 export const ADD_PRODUCT_CATEGORY = gql`
   mutation AddProductCategory($name: String!, $thumbnail: String) {
     addProductCategory(name: $name, thumbnail: $thumbnail) {
