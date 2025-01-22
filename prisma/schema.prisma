@@ -1,0 +1,428 @@
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id                    String                 @id @default(cuid())
+  name                  String?
+  email                 String?                @unique
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  role                  UserRole               @default(USER)
+  accounts              Account[]
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  cart                  Cart?                  @relation(name: "UserCart")
+  orders                Order[]
+  userAddresses         UserAddress[]
+  wishList              WishList?              @relation(name: "UserWishList")
+  reviews               Review[]
+  ambulanceBookings     AmbulanceBooking[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model EmailVerificationToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
+
+enum UserAddressType {
+  HOME
+  OFFICE
+  OTHER
+}
+
+model UserAddress {
+  id       String          @id @default(cuid())
+  userId   String
+  type     UserAddressType @default(HOME)
+  address1 String          @db.Text
+  address2 String?         @db.Text
+  state    String
+  city     String
+  postcode Int
+  country  String
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_user_address_userId")
+  @@map("user_addresses")
+}
+
+model NewsletterSubscriber {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  subscribedAt DateTime? @default(now())
+}
+
+model Messages {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  createdAt DateTime? @default(now())
+}
+
+model Product {
+  id            String              @id @default(cuid())
+  name          String
+  sku           String?             @unique
+  images        String[]
+  detailsImages String[]
+  regularPrice  Float
+  discount      Float
+  offerPrice    Float
+  stock         Int                 @default(0)
+  status        ProductStatus       @default(ACTIVE) // Control product visibility
+  tags          String[]
+  details       String?             @db.Text
+  wishedItems   WishedItem[]
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  variants      ProductVariant[] // Related product variants
+  reviews       Review[] // Product reviews
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  categoryId    String
+  category      ProductCategory     @relation(fields: [categoryId], references: [id])
+  subcategoryId String?
+  subcategory   ProductSubCategory? @relation(fields: [subcategoryId], references: [id])
+  flexibleData  Json?
+
+  @@map("products")
+}
+
+enum ProductStatus {
+  ACTIVE
+  DISCONTINUED
+}
+
+model ProductVariant {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String // Variant name (e.g., "Size: M", "Color: Red")
+  price     Float // Price specific to the variant
+  stock     Int      @default(0) // Stock for the variant
+  sku       String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("product_variants")
+}
+
+model ProductCategory {
+  id            String               @id @default(cuid())
+  name          String               @unique
+  thumbnail     String
+  filters       Json? // JSON for dynamic filters
+  subcategories ProductSubCategory[]
+  products      Product[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  @@map("product_categories")
+}
+
+model ProductSubCategory {
+  id         String          @id @default(cuid())
+  name       String
+  filters    Json? // JSON for dynamic filters
+  categoryId String
+  category   ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products   Product[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  @@unique([categoryId, name])
+  @@map("product_sub_categories")
+}
+
+model Cart {
+  id          String     @id @default(cuid())
+  userId      String?    @unique // Optional for guest carts
+  sessionId   String? // Used for guest sessions
+  totalItems  Int        @default(0) // Total items in the cart
+  totalAmount Float      @default(0) // Total cart value
+  items       CartItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User?      @relation(name: "UserCart", fields: [userId], references: [id], onDelete: Cascade) // Relation for authenticated user
+
+  @@index([sessionId], map: "idx_sessionId")
+  @@map("carts")
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String // Associated cart ID
+  productId String // Associated product ID
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade) // Product relation
+  quantity  Int     @default(1) // Quantity of the product
+  price     Float // Price per unit
+  subtotal  Float   @default(0) // Calculated as quantity * price
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cartId, productId], map: "idx_cart_product")
+  @@map("cart_items")
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY // Cash payment upon delivery
+  CREDIT_CARD // Payment via credit card
+  BKASH // Payment via debit card
+  NAGAD // Unified Payments Interface (UPI)
+  ROCKET // Payment via bank transfer
+}
+
+enum PaymentStatus {
+  PENDING // Payment is yet to be made
+  PAID // Payment has been successfully completed
+  FAILED // Payment failed due to an error
+  REFUNDED // Payment has been refunded
+}
+
+enum OrderStatus {
+  PENDING // Order is placed but not yet processed
+  PROCESSING // Order is being prepared
+  SHIPPED // Order has been shipped
+  IN_TRANSIT // Order is on its way to the delivery address
+  DELIVERED // Order has been successfully delivered
+  RETURN_REQUESTED // Customer has requested a return
+  RETURNED // Order has been returned
+  CANCELED // Order has been canceled by the user or system
+  FAILED // Order processing failed due to some issue
+  REFUNDED // Payment for the order has been refunded
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  userId          String
+  deliveryAddress String
+  paymentMethod   PaymentMethod @default(CASH_ON_DELIVERY)
+  paymentStatus   PaymentStatus @default(PENDING)
+  status          OrderStatus   @default(PENDING)
+  items           OrderItem[]
+  couponId        String? // Optional coupon applied to the order
+  coupon          Coupon?       @relation(fields: [couponId], references: [id])
+  discountAmount  Float         @default(0) // Discount amount from the applied coupon
+  totalPrice      Float         @default(0)
+  deliveryCharge  Float         @default(0)
+  totalPayable    Float         @default(0)
+  deliveryDate    DateTime? // Estimated delivery date
+  trackingNumber  String? // Tracking number for the shipment
+  notes           String?       @db.Text // Special instructions from customers
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  user            User          @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String? // Links the item to an order
+  productId String // Links the item to a product
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1) // Quantity of the product
+  price     Float // Price per product
+  subtotal  Float   @default(0) // Subtotal for the quantity (price * quantity)
+  order     Order?  @relation(fields: [orderId], references: [id])
+
+  @@map("order_items")
+}
+
+model WishList {
+  id          String       @id @default(cuid())
+  userId      String?      @unique
+  wishedItems WishedItem[] // Items in the wish list
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User?        @relation(name: "UserWishList", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_userId")
+  @@map("wishlist")
+}
+
+model WishedItem {
+  id         String    @id @default(cuid())
+  productId  String
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  wishlistId String?
+  wishList   WishList? @relation(fields: [wishlistId], references: [id])
+
+  @@index([wishlistId, productId], map: "idx_wishlistId")
+  @@map("wished_items")
+}
+
+model Coupon {
+  id                 String       @id @default(cuid())
+  code               String       @unique // Unique coupon code
+  description        String?
+  discountType       DiscountType @default(PERCENTAGE) // Type of discount
+  discountValue      Float        @default(0) // Discount value (percentage or flat amount)
+  minimumOrderAmount Float?       @default(1)
+  usageLimit         Int?         @default(1)
+  usedCount          Int          @default(0) // Tracks the number of times the coupon has been used
+  startDate          DateTime
+  endDate            DateTime?
+  status             CouponStatus @default(ACTIVE) // Indicates if the coupon is active or inactive
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  Order              Order[]
+
+  @@map("coupons")
+}
+
+enum DiscountType {
+  PERCENTAGE // Discount as a percentage of the order total
+  FLAT // Flat discount amount
+}
+
+enum CouponStatus {
+  ACTIVE // Coupon is valid and can be used
+  EXPIRED // Coupon has expired
+  INACTIVE // Coupon is not currently active
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int // Rating value (e.g., 1 to 5 stars)
+  comment   String?  @db.Text // Optional review comment
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+// Enum for Ambulance Status
+enum AmbulanceStatus {
+  AVAILABLE // Ambulance is available for booking
+  BUSY // Ambulance is currently on a trip
+  OUT_OF_SERVICE // Ambulance is not operational
+}
+
+// Enum for Booking Status
+enum BookingStatus {
+  PENDING // Booking request is made but not yet confirmed
+  CONFIRMED // Booking is confirmed
+  COMPLETED // Booking is completed successfully
+  CANCELED // Booking has been canceled
+}
+
+// Ambulance Service Model
+model AmbulanceService {
+  id            String             @id @default(cuid())
+  name          String // Ambulance name or identifier
+  licensePlate  String             @unique // Unique vehicle identifier
+  driverName    String? // Driver's name
+  driverContact String? // Driver's contact number
+  status        AmbulanceStatus    @default(AVAILABLE) // Current status of the ambulance
+  capacity      Int // Capacity (e.g., number of patients or seats)
+  ratePerKm     Float // Cost per kilometer
+  baseCharge    Float              @default(0) // Base charge for the service
+  location      String             @db.Text // Current location of the ambulance
+  bookings      AmbulanceBooking[] // List of bookings for this ambulance
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+// Ambulance Booking Model
+model AmbulanceBooking {
+  id             String           @id @default(cuid())
+  userId         String? // User who booked the ambulance
+  ambulanceId    String // Linked ambulance
+  pickupLocation String           @db.Text // Pickup address
+  dropLocation   String           @db.Text // Drop-off address
+  distanceInKm   Float // Calculated distance in kilometers
+  estimatedCost  Float // Estimated cost based on distance and rates
+  status         BookingStatus    @default(PENDING) // Booking status
+  scheduledAt    DateTime? // Scheduled date and time for pickup
+  completedAt    DateTime? // Completion timestamp
+  user           User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  ambulance      AmbulanceService @relation(fields: [ambulanceId], references: [id], onDelete: Cascade)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@map("ambulance_bookings")
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String   @db.Text
+  content   String   @db.Text
+  thumbnail String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
