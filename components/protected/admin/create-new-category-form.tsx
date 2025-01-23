@@ -17,7 +17,7 @@ const NewProductCategoryForm = () => {
     ADD_PRODUCT_CATEGORY,
     {
       onCompleted: () => {
-        router.push("/admin/categories");
+        router.push("/admin/product-categories");
       },
     }
   );

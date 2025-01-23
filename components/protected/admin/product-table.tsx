@@ -45,17 +45,18 @@ const ProductTable = () => {
 
   const handleDelete = (id: string) => {
     console.log(`Deleting product with id: ${id}`);
-    deleteProduct({ variables: { id } })
+    deleteProduct({ variables: { deleteProductId: id } })
       .then(() => {
         toast.success("Product deleted successfully");
       })
       .catch((error) => {
         toast.error("Error deleting product:", error);
+        console.error(error);
       });
   };
 
   const prefetchAction = () => {
-    console.log("Prefetching data...");
+    router.refresh();
   };
 
   return (

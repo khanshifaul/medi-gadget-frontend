@@ -568,6 +568,12 @@ export const resolvers = {
 
       return order;
     },
+    deleteOrder: async (_: any, args: any, context: Context) => {
+      await context.db.order.delete({
+        where: { id: args.id },
+      });
+      return true;
+    },
 
     updateOrderStatus: async (_: unknown, args: any, context: Context) => {
       return await context.db.order.update({

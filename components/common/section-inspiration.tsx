@@ -13,15 +13,13 @@ const inspirationContent = {
 const InspirationSection = () => {
   return (
     <div className="md:container mx-auto my-12">
-      <div className="md:flex md:flex-row justify-start items-center bg-accent text-accent-foreground rounded p-4">
+      <div className="md:flex md:flex-row justify-start items-center bg-accent text-accent-foreground rounded p-2 gap-2">
         <div className="flex flex-col justify-center items-start gap-5 basis-1/3">
           <h2 className="font-bold text-3xl">{inspirationContent.title}</h2>
-          <p className="font-semibold text-muted">
-            {inspirationContent.description}
-          </p>
+          <p className="font-semibold">{inspirationContent.description}</p>
           <Button
             size={"lg"}
-            className="w-fit bg-primary text-2xl rounded-none p-6"
+            className="w-fit bg-primary text-2xl rounded-none p-4 my-2"
           >
             <Link href={"/blog"}>{inspirationContent.buttonText}</Link>
           </Button>

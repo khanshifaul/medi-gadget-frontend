@@ -49,9 +49,11 @@ const HeroItem = ({
         <div className="absolute bottom-0 right-0 rounded-xl w-fit md:max-w-[640px] h-fit">
           <Card className="bg-secondary text-black opacity-80 m-6">
             <CardContent className="p-6">
-              <h2 className="font-semibold text-slate-700">{tag}</h2>
-              <h1 className="text-5xl text-primary">{title}</h1>
-              <p className="text-lg font-medium">{details}</p>
+              <h2 className="font-semibold text-primary/40">{tag}</h2>
+              <h1 className="text-2xl font-semibold text-primary">{title}</h1>
+              <p className="text-md font-medium text-ellipsis text-primary/60">
+                {details}
+              </p>
               {buttonLink && (
                 <Button
                   size={"lg"}

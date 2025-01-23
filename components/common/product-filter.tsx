@@ -22,18 +22,19 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
       </label>
       <div className="mt-2 space-y-2">
         {categories.map((category) => (
-          <div key={category} className="flex items-center gap-1">
+          <div key={category} className="flex items-center gap-2">
             <input
               type="checkbox"
               id={`category-${category}`}
               value={category}
               checked={selectedCategories.includes(category)}
               onChange={() => handleCheckboxChange(category)}
-              className="h-4 w-4 flex-none text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              aria-checked={selectedCategories.includes(category)}
             />
             <label
               htmlFor={`category-${category}`}
-              className="ml-2 block text-sm text-gray-700"
+              className="text-sm text-gray-700"
             >
               {category}
             </label>

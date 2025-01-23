@@ -1,4 +1,9 @@
 "use client";
+import {
+  DELETE_PRODUCT,
+  DELETE_PRODUCT_CATEGORY,
+  DELETE_PRODUCT_SUBCATEGORY,
+} from "@/app/api/graphql/mutation";
 import { GET_CATEGORIES } from "@/app/api/graphql/queries";
 import DeleteDialog from "@/components/protected/admin/delete-dialog";
 import {
@@ -10,11 +15,29 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { IProductCategory } from "@/types";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const CategoryTable: React.FC = () => {
+  const router = useRouter();
   const { data, loading, error } = useQuery(GET_CATEGORIES);
+  const [deleteProductCategory] = useMutation(DELETE_PRODUCT_CATEGORY, {
+    onCompleted: () => {
+      router.refresh();
+    },
+  });
+  const [deleteProductSubcategory] = useMutation(DELETE_PRODUCT_SUBCATEGORY, {
+    onCompleted: () => {
+      router.refresh();
+    },
+  });
+  const [deleteProduct] = useMutation(DELETE_PRODUCT, {
+    onCompleted: () => {
+      router.refresh();
+    },
+  });
   const [openCategoryIndex, setOpenCategoryIndex] = useState<number | null>(
     null
   );
@@ -27,16 +50,42 @@ const CategoryTable: React.FC = () => {
 
   const productCategories: IProductCategory[] = data?.productCategories || [];
 
-  const handleDelete = (id: string) => {
+  const handleProductCategoryDelete = (id: string) => {
     console.log(`Deleting category with id: ${id}`);
+    deleteProductCategory({ variables: { deleteProductCategoryId: id } })
+      .then(() => {
+        toast.success("Category deleted successfully");
+      })
+      .catch((error: Error) => {
+        toast.error(`Error deleting category: ${error.message}`);
+      });
   };
 
+  const handleProductSubcategoryDelete = (id: string) => {
+    console.log(`Deleting subcategory with id: ${id}`);
+    deleteProductSubcategory({
+      variables: { handleProductSubcategoryDelete: id },
+    })
+      .then(() => {
+        toast.success("Subcategory deleted successfully");
+      })
+      .catch((error: Error) => {
+        toast.error(`Error deleting subcategory: ${error.message}`);
+      });
+  };
   const handleProductDelete = (id: string) => {
     console.log(`Deleting product with id: ${id}`);
+    deleteProduct({ variables: { deleteProductId: id } })
+      .then(() => {
+        toast.success("Product deleted successfully");
+      })
+      .catch((error: Error) => {
+        toast.error(`Error deleting product: ${error.message}`);
+      });
   };
 
   const prefetchAction = () => {
-    console.log("Prefetching data...");
+    router.refresh();
   };
 
   const toggleSubcategoryVisibility = (index: number) => {
@@ -84,7 +133,7 @@ const CategoryTable: React.FC = () => {
                 <DeleteDialog
                   Id={category.id}
                   item="Category"
-                  onDelete={handleDelete}
+                  onDelete={handleProductCategoryDelete}
                   prefetchAction={prefetchAction}
                 />
               </TableCell>
@@ -190,6 +239,16 @@ const CategoryTable: React.FC = () => {
                                           </Table>
                                         )}
                                       </div>
+                                    </TableCell>
+                                    <TableCell className="px-3">
+                                      <DeleteDialog
+                                        Id={subcategory.id}
+                                        item="Subcategory"
+                                        onDelete={
+                                          handleProductSubcategoryDelete
+                                        }
+                                        prefetchAction={prefetchAction}
+                                      />
                                     </TableCell>
                                   </TableRow>
                                 )}

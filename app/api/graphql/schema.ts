@@ -488,6 +488,7 @@ type Mutation {
   addOrder(input: AddOrderInput!): Order!
   createOrderFromCart(userId: String!, cartId: String!, deliveryAddress: String!, paymentMethod: PaymentMethod!, couponId: String): Order
   updateOrderStatus(id: String!, status: OrderStatus!): Order
+  deleteOrder(id: String!): Boolean
 
 
   # Messages Mutations

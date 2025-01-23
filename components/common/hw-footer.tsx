@@ -19,15 +19,15 @@ const GuestFooter = () => {
   return (
     <div className="md:container mx-auto">
       <div className="md:flex md:flex-row items-start my-6 border-t-2 py-2">
-        <div className="basis-1/2 flex flex-col gap-10 justify-start">
+        <div className="px-2 basis-1/2 flex flex-col gap-10 justify-start">
           <div className="flex justify-start">
             <Logo />
           </div>
           <p className="text-neutral-400 text-base">
-            236 5th SE Avenue, New York <br /> NY 10000, United States
+            Kazi Nazrul Avenue, Banglamotor, <br /> Dhaka-1000, Bangladesh
           </p>
           <div className="flex gap-5">
-            <Link href={"/"}>
+            <Link href={"https://www.facebook.com/medigadget.bd"}>
               <FaFacebook className="text-2xl" />
             </Link>
             <Link href={"/"}>
@@ -35,7 +35,7 @@ const GuestFooter = () => {
             </Link>
           </div>
         </div>
-        <div className="basis-1/2 flex flex-row items-start my-12 md:m-0">
+        <div className="px-2 basis-1/2 flex flex-row items-start my-12 md:m-0">
           <div className="basis-1/2 flex flex-col gap-5">
             <h3 className="text-neutral-500 font-semibold">Links</h3>
             {navLink.map((link, index) => {
@@ -67,7 +67,7 @@ const GuestFooter = () => {
         </div>
       </div>
       <div className="md:flex md:justify-between items-center border-t-2 py-2">
-        <p className="text-center">
+        <p className="px-2 text-center">
           <span> {new Date().getFullYear()} &copy; </span>
           MediGadget. All rights reserved.
         </p>

@@ -1,12 +1,12 @@
 "use client";
 import { GET_PRODUCTS } from "@/app/api/graphql/queries";
+import ProductCard from "@/components/common/product-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IProduct } from "@/types";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
-import ProductCard from "./product-card";
 
 const Products: React.FC = () => {
   const { data, loading, error } = useQuery<{ Products: IProduct[] }>(
@@ -14,6 +14,9 @@ const Products: React.FC = () => {
   );
   const products = data?.Products || [];
   const router = useRouter();
+
+  // Limit the products to only 12
+  const limitedProducts = products.slice(0, 8);
 
   return (
     <div className="md:container mx-auto my-12">
@@ -26,12 +29,12 @@ const Products: React.FC = () => {
         </div>
         {loading && <p className="text-center py-6">Loading...</p>}
         {error && <p className="text-center py-6">Error: {error.message}</p>}
-        {!loading && !error && products.length === 0 && (
+        {!loading && !error && limitedProducts.length === 0 && (
           <p className="text-center py-6">No products found.</p>
         )}
-        {!loading && !error && products.length > 0 && (
-          <div className="grid md:grid-cols-4 grid-cols-1 gap-2 px-2">
-            {products.map((product) => (
+        {!loading && !error && limitedProducts.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5  gap-2 px-2">
+            {limitedProducts.map((product) => (
               <Suspense
                 key={product.id}
                 fallback={
@@ -49,6 +52,10 @@ const Products: React.FC = () => {
                   category={{
                     id: product.category.id,
                     name: product.category.name,
+                  }}
+                  subcategory={{
+                    id: product.subcategory.id,
+                    name: product.subcategory.name,
                   }}
                 />
               </Suspense>

@@ -1,14 +1,41 @@
 "use client";
+import { DELETE_ORDER } from "@/app/api/graphql/mutation";
 import { GET_ORDERS } from "@/app/api/graphql/queries";
 import { IOrder, IOrderItem } from "@/types";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
+import DeleteDialog from "./delete-dialog";
 
 const OrderTable: React.FC = () => {
+  const router = useRouter();
   const { loading, error, data } = useQuery(GET_ORDERS);
   const orders: IOrder[] = data?.Orders || [];
 
+  const [deleteOrder] = useMutation(DELETE_ORDER, {
+    onCompleted: () => {
+      router.refresh();
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    console.log(`Deleting order with id: ${id}`);
+    deleteOrder({ variables: { deleteOrderId: id } })
+      .then(() => {
+        toast.success("Order deleted successfully");
+      })
+      .catch((error) => {
+        toast.error("Error deleting order:", error);
+        console.error(error);
+      });
+  };
+
   if (error) return <p>Error: {error.message}</p>;
+
+  function prefetchAction(): void {
+    router.refresh();
+  }
 
   return (
     <table className="min-w-full light:bg-white">
@@ -50,6 +77,14 @@ const OrderTable: React.FC = () => {
                   </li>
                 ))}
               </ul>
+            </td>
+            <td className="border px-4 py-2">
+              <DeleteDialog
+                Id={order.id}
+                item="order"
+                onDelete={handleDelete}
+                prefetchAction={prefetchAction}
+              />
             </td>
           </tr>
         ))}

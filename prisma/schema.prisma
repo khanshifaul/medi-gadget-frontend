@@ -48,7 +48,7 @@ model Account {
   id_token          String? @db.Text
   session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -84,7 +84,7 @@ model TwoFactorConfirmation {
   id String @id @default(cuid())
 
   userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([userId])
 }
@@ -105,7 +105,7 @@ model UserAddress {
   city     String
   postcode Int
   country  String
-  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId], map: "idx_user_address_userId")
   @@map("user_addresses")
@@ -147,9 +147,9 @@ model Product {
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
   categoryId    String
-  category      ProductCategory     @relation(fields: [categoryId], references: [id])
+  category      ProductCategory     @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   subcategoryId String?
-  subcategory   ProductSubCategory? @relation(fields: [subcategoryId], references: [id])
+  subcategory   ProductSubCategory? @relation(fields: [subcategoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   flexibleData  Json?
 
   @@map("products")
@@ -163,7 +163,7 @@ enum ProductStatus {
 model ProductVariant {
   id        String   @id @default(cuid())
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   name      String // Variant name (e.g., "Size: M", "Color: Red")
   price     Float // Price specific to the variant
   stock     Int      @default(0) // Stock for the variant
@@ -192,7 +192,7 @@ model ProductSubCategory {
   name       String
   filters    Json? // JSON for dynamic filters
   categoryId String
-  category   ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category   ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   products   Product[]
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
@@ -210,7 +210,7 @@ model Cart {
   items       CartItem[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  user        User?      @relation(name: "UserCart", fields: [userId], references: [id], onDelete: Cascade) // Relation for authenticated user
+  user        User?      @relation(name: "UserCart", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade) // Relation for authenticated user
 
   @@index([sessionId], map: "idx_sessionId")
   @@map("carts")
@@ -220,11 +220,11 @@ model CartItem {
   id        String  @id @default(cuid())
   cartId    String // Associated cart ID
   productId String // Associated product ID
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade) // Product relation
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade) // Product relation
   quantity  Int     @default(1) // Quantity of the product
   price     Float // Price per unit
   subtotal  Float   @default(0) // Calculated as quantity * price
-  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -270,7 +270,7 @@ model Order {
   status          OrderStatus   @default(PENDING)
   items           OrderItem[]
   couponId        String? // Optional coupon applied to the order
-  coupon          Coupon?       @relation(fields: [couponId], references: [id])
+  coupon          Coupon?       @relation(fields: [couponId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   discountAmount  Float         @default(0) // Discount amount from the applied coupon
   totalPrice      Float         @default(0)
   deliveryCharge  Float         @default(0)
@@ -280,7 +280,7 @@ model Order {
   notes           String?       @db.Text // Special instructions from customers
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
-  user            User          @relation(fields: [userId], references: [id])
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("orders")
 }
@@ -289,11 +289,11 @@ model OrderItem {
   id        String  @id @default(cuid())
   orderId   String? // Links the item to an order
   productId String // Links the item to a product
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   quantity  Int     @default(1) // Quantity of the product
   price     Float // Price per product
   subtotal  Float   @default(0) // Subtotal for the quantity (price * quantity)
-  order     Order?  @relation(fields: [orderId], references: [id])
+  order     Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("order_items")
 }
@@ -304,7 +304,7 @@ model WishList {
   wishedItems WishedItem[] // Items in the wish list
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  user        User?        @relation(name: "UserWishList", fields: [userId], references: [id], onDelete: Cascade)
+  user        User?        @relation(name: "UserWishList", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId], map: "idx_userId")
   @@map("wishlist")
@@ -313,10 +313,10 @@ model WishList {
 model WishedItem {
   id         String    @id @default(cuid())
   productId  String
-  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt  DateTime  @default(now())
   wishlistId String?
-  wishList   WishList? @relation(fields: [wishlistId], references: [id])
+  wishList   WishList? @relation(fields: [wishlistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([wishlistId, productId], map: "idx_wishlistId")
   @@map("wished_items")
@@ -360,8 +360,8 @@ model Review {
   comment   String?  @db.Text // Optional review comment
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("reviews")
 }
@@ -410,8 +410,8 @@ model AmbulanceBooking {
   status         BookingStatus    @default(PENDING) // Booking status
   scheduledAt    DateTime? // Scheduled date and time for pickup
   completedAt    DateTime? // Completion timestamp
-  user           User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
-  ambulance      AmbulanceService @relation(fields: [ambulanceId], references: [id], onDelete: Cascade)
+  user           User?            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ambulance      AmbulanceService @relation(fields: [ambulanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 

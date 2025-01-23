@@ -84,12 +84,24 @@ export const ADD_PRODUCT_CATEGORY = gql`
   }
 `;
 
+export const DELETE_PRODUCT_CATEGORY = gql`
+  mutation DeleteProductCategory($deleteProductCategoryId: String!) {
+    deleteProductCategory(id: $deleteProductCategoryId)
+  }
+`;
+
 export const ADD_PRODUCT_SUBCATEGORY = gql`
   mutation AddProductSubCategory($name: String!, $categoryId: String!) {
     addProductSubCategory(name: $name, categoryId: $categoryId) {
       id
       name
     }
+  }
+`;
+
+export const DELETE_PRODUCT_SUBCATEGORY = gql`
+  mutation DeleteProductSubCategory($deleteProductSubCategoryId: String!) {
+    deleteProductSubCategory(id: $deleteProductSubCategoryId)
   }
 `;
 
@@ -267,6 +279,23 @@ export const ADD_ORDER = gql`
   mutation AddOrder($input: AddOrderInput!) {
     addOrder(input: $input) {
       id
+    }
+  }
+`;
+
+export const DELETE_ORDER = gql`
+  mutation DeleteOrder($deleteOrderId: String!) {
+    deleteOrder(id: $deleteOrderId)
+  }
+`;
+export const UPDATE_ORDER_STATUS = gql`
+  mutation UpdateOrderStatus(
+    $updateOrderStatusId: String!
+    $status: OrderStatus!
+  ) {
+    updateOrderStatus(id: $updateOrderStatusId, status: $status) {
+      id
+      status
     }
   }
 `;

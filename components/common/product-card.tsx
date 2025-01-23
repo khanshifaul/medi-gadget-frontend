@@ -19,6 +19,10 @@ interface ProductCardProps {
     id: string;
     name: string;
   };
+  subcategory: {
+    id: string;
+    name: string;
+  };
 }
 
 const ProductCard = ({
@@ -30,6 +34,7 @@ const ProductCard = ({
   discount,
   offerPrice,
   category,
+  subcategory,
 }: ProductCardProps) => {
   const dispatch = useAppDispatch();
 
@@ -48,13 +53,13 @@ const ProductCard = ({
         </div>
       </CardHeader>
       <CardContent className="relative flex p-0 w-full">
-        <div className="flex flex-col p-2">
-          <div className="text-foreground/35 text-sm md:text-base font-medium mt-1 md:mt-3">
-            {category.name}
+        <div className="flex flex-col p-2 gap-1">
+          <div className="text-foreground/35 text-sm md:text-base font-medium mt-1 max-h-12">
+            {category.name} / {subcategory.name}
           </div>
           <Link href={`/shop/${category.name}/${id}`}>
             <div
-              className="text-lg md:text-2xl font-semibold hover:underline line-clamp-2"
+              className="text-md md:text-lg font-semibold hover:underline line-clamp-2 max-h-12"
               title={name}
             >
               {name}

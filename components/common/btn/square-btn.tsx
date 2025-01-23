@@ -107,7 +107,7 @@ const SquareButton = ({ icon, className, onClick }: SquareButtonProps) => {
     <Button
       variant="outline"
       onClick={handleClick}
-      className={`${className} p-0`}
+      className={`${className} p-0 w-10 h-10 md:h-12 md:w-12 aspect-square`}
     >
       <IconComponent className="text-2xl" />
     </Button>

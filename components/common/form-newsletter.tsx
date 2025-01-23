@@ -42,7 +42,7 @@ const NewsletterForm = () => {
             <input
               value={email}
               onChange={handleEmailChange}
-              className="w-full text-xl rounded-none p-6 border-0 border-accent-foreground border-b-2 shadow-none"
+              className="w-full h-12 text-xl rounded-none p-2 border-0 border-accent-foreground border-b-2 shadow-none"
               type="email"
               placeholder="john@company.com"
             />
@@ -51,7 +51,7 @@ const NewsletterForm = () => {
             disabled={isPending}
             type="submit"
             size={"lg"}
-            className="w-fit bg-primary text-xl rounded-none p-6"
+            className="w-fit h-12 bg-primary text-xl rounded-none p-6"
           >
             Subscribe
           </Button>

@@ -34,7 +34,7 @@ const NewProductSubCategoryForm = () => {
     ADD_PRODUCT_SUBCATEGORY,
     {
       onCompleted: () => {
-        router.push("/admin/subcategories");
+        router.push("/admin/product-categories");
       },
     }
   );

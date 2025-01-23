@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IProduct } from "@/types";
 import { useQuery } from "@apollo/client";
-import { Suspense, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 
 const ShopProductTable = ({
   selectedCategories = [],
@@ -18,14 +18,18 @@ const ShopProductTable = ({
   const [currentPage, setCurrentPage] = useState(1); // Current page state
 
   const { data, loading, error } = useQuery(GET_PRODUCTS);
-  const products: IProduct[] = data?.Products || [];
+  const products: IProduct[] = useMemo(() => data?.Products || [], [data]);
 
   // Filter products based on selected categories
-  const filteredProducts = selectedCategories.length
-    ? products.filter((product) =>
-        selectedCategories.includes(product.categoryId)
-      )
-    : products;
+  const filteredProducts = useMemo(
+    () =>
+      selectedCategories.length
+        ? products.filter((product) =>
+            selectedCategories.includes(product.category.name)
+          )
+        : products,
+    [products, selectedCategories]
+  );
 
   // Calculate the range of products to display
   const indexOfLastProduct = currentPage * itemsPerPage;
@@ -39,8 +43,10 @@ const ShopProductTable = ({
     <div className="md:container mx-auto">
       {loading && <p className="text-center py-6">Loading...</p>}
       {error && <p className="text-center py-6">Error: {error.message}</p>}
-      {!loading && !error && currentProducts.length === 0 && (
-        <p className="text-center py-6">No products found.</p>
+      {!loading && !error && filteredProducts.length === 0 && (
+        <p className="text-center py-6">
+          No products found for the selected categories.
+        </p>
       )}
       <div className="grid md:grid-cols-4 grid-cols-1 gap-4 px-4">
         {currentProducts.map((product) => (
@@ -59,6 +65,10 @@ const ShopProductTable = ({
               category={{
                 id: product.category.id,
                 name: product.category.name,
+              }}
+              subcategory={{
+                id: product.subcategory.id,
+                name: product.subcategory.name,
               }}
             />
           </Suspense>
