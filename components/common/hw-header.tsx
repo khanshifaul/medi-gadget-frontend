@@ -1,7 +1,6 @@
 "use client";
 import CartBtn from "@/components/common/btn/cart-btn";
 import CompareBtn from "@/components/common/btn/compare-btn";
-import FavBtn from "@/components/common/btn/fav-btn";
 import MenuClose from "@/components/common/btn/menu-close";
 import MenuOpen from "@/components/common/btn/menu-open";
 import { ThemeBtn } from "@/components/common/btn/theme-btn";
@@ -16,6 +15,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LoginButton } from "../auth/login-button";
 import { UserButton } from "../auth/user-button";
+import WishlistBtn from "./btn/wishlist-btn";
 
 export const navData = [
   { name: "Home", icon: "<FcHome />", path: "/" },
@@ -73,7 +73,7 @@ const GuestHeader = () => {
                 </LoginButton>
                 <CartBtn />
                 <CompareBtn />
-                <FavBtn />
+                <WishlistBtn />
                 <ThemeBtn />
               </div>
             )}
@@ -83,7 +83,7 @@ const GuestHeader = () => {
                 <UserButton />
                 <CartBtn />
                 <CompareBtn />
-                <FavBtn />
+                <WishlistBtn />
                 <ThemeBtn />
               </div>
             )}

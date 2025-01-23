@@ -3,6 +3,8 @@
 import SquareButton from "@/components/common/btn/square-btn";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { addProductToCart } from "@/lib/features/cart/cartSlice";
+import { addProductToCompare } from "@/lib/features/compare/compareSlice";
+import { addProductToWishlist } from "@/lib/features/wishlist/wishlistSlice";
 import { useAppDispatch } from "@/lib/hooks";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,13 +43,15 @@ const ProductCard = ({
   return (
     <Card className="p-0 rounded-sm w-full h-full">
       <CardHeader className="relative flex p-0">
-        <Image
-          src={images[0]}
-          alt={name}
-          className="aspect-square object-cover object-center w-full h-full"
-          width="500"
-          height="500"
-        />
+        <Link href={`/shop/${category.name}/${id}`}>
+          <Image
+            src={images[0]}
+            alt={name}
+            className="aspect-square object-cover object-center w-full h-full"
+            width="500"
+            height="500"
+          />
+        </Link>
         <div className="absolute top-2 right-2 bg-red-500 text-white text-center items-center font-medium whitespace-nowrap py-1 md:py-3 rounded-full w-8 h-8 md:w-12 md:h-12">
           {discount}%
         </div>
@@ -95,9 +99,24 @@ const ProductCard = ({
           <SquareButton
             icon="compare"
             className="w-6 h-6 md:w-8 md:h-8 p-0 text-primary"
+            onClick={() => {
+              dispatch(addProductToCompare(id));
+            }}
           />
+
           <SquareButton
             icon="wishlist"
+            onClick={() => {
+              dispatch(
+                addProductToWishlist({
+                  id,
+                  name,
+                  sku,
+                  image: images[0],
+                  price: offerPrice,
+                })
+              );
+            }}
             className="w-6 h-6 md:w-8 md:h-8 p-0 text-primary"
           />
         </div>

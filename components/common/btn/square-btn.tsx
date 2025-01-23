@@ -81,15 +81,7 @@ const SquareButton = ({ icon, className, onClick }: SquareButtonProps) => {
         });
         break;
       case "compare":
-        toast("Item has been added to Comparison List", {
-          description: "Item has been added to Comparable List",
-          action: {
-            label: "View comparison",
-            onClick: () => {
-              window.location.href = "/compare";
-            },
-          },
-        });
+        toast("Item has been added to Comparison List");
         break;
       case "wishlist":
         toast("Item has been added to Wish List");

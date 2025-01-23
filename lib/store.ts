@@ -1,6 +1,7 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { cartSlice } from "./features/cart/cartSlice";
+import { compareSlice } from "./features/compare/compareSlice";
 import { counterSlice } from "./features/counter/counterSlice";
 import { navigationSlice } from "./features/navigation/navigationSlice";
 import { productSlice } from "./features/product/productSlice";
@@ -15,7 +16,8 @@ const rootReducer = combineSlices(
   navigationSlice,
   productSlice,
   quotesApiSlice,
-  wishlistSlice
+  wishlistSlice,
+  compareSlice
 );
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
