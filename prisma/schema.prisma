@@ -30,23 +30,26 @@ model User {
   wishList              WishList?              @relation(name: "UserWishList")
   reviews               Review[]
   ambulanceBookings     AmbulanceBooking[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
 
   @@map("users")
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String   @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?  @db.Text
   session_state     String?
+  createdAt         DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -54,28 +57,31 @@ model Account {
 }
 
 model EmailVerificationToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String   @unique
-  expires DateTime
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
 
   @@unique([email, token])
 }
 
 model PasswordResetToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String   @unique
-  expires DateTime
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
 
   @@unique([email, token])
 }
 
 model TwoFactorToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String   @unique
-  expires DateTime
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
 
   @@unique([email, token])
 }
@@ -96,16 +102,18 @@ enum UserAddressType {
 }
 
 model UserAddress {
-  id       String          @id @default(cuid())
-  userId   String
-  type     UserAddressType @default(HOME)
-  address1 String          @db.Text
-  address2 String?         @db.Text
-  state    String
-  city     String
-  postcode Int
-  country  String
-  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id        String          @id @default(cuid())
+  userId    String
+  type      UserAddressType @default(HOME)
+  address1  String          @db.Text
+  address2  String?         @db.Text
+  state     String
+  city      String
+  postcode  Int
+  country   String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 
   @@index([userId], map: "idx_user_address_userId")
   @@map("user_addresses")
@@ -115,6 +123,7 @@ model NewsletterSubscriber {
   id           String    @id @default(cuid())
   email        String    @unique
   subscribedAt DateTime? @default(now())
+  createdAt    DateTime  @default(now())
 }
 
 model Messages {

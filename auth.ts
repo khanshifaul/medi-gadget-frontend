@@ -31,18 +31,6 @@ export const {
     async signIn({ user, account }) {
       // Allow OAuth without email verification
       if (account?.provider !== "credentials") {
-        db.userAddress.create({
-          data: {
-            userId: user.id as string,
-            type: "HOME",
-            address1: "",
-            address2: null,
-            postcode: 0,
-            city: "",
-            state: "",
-            country: "",
-          },
-        });
         return true;
       }
 

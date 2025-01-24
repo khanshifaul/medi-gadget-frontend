@@ -37,6 +37,7 @@ const GuestHeader = () => {
         <div className="flex justify-between items-center min-md:mx-12">
           <Logo />
           <nav
+            id="navbar"
             className={`hidden md:flex flex-row justify-end items-center gap-4 px-12`}
           >
             {navData.map((link, index) => {
@@ -68,7 +69,7 @@ const GuestHeader = () => {
                     size={"sm"}
                     className={`hidden md:block w-fit rounded-none rounded-bl-lg`}
                   >
-                    <Link href={"/login"}>Sign In</Link>
+                    <Link href={"/auth/login"}>Sign In</Link>
                   </Button>
                 </LoginButton>
                 <CartBtn />
@@ -87,7 +88,7 @@ const GuestHeader = () => {
                 <ThemeBtn />
               </div>
             )}
-            <div className="block md:hidden">
+            <div id="navbar-toggle" className="block md:hidden">
               {!navIsOpen ? <MenuOpen /> : <MenuClose />}
             </div>
           </div>
@@ -98,7 +99,10 @@ const GuestHeader = () => {
             navIsOpen ? "animate-left-right" : "-translate-x-full"
           }`}
         >
-          <nav className="flex flex-col justify-end items-end gap-4">
+          <nav
+            id="navbar"
+            className="flex flex-col justify-end items-end gap-4"
+          >
             {navData.map((link, index) => {
               return (
                 <Button
@@ -126,7 +130,7 @@ const GuestHeader = () => {
                     size={"sm"}
                     className={`w-fit rounded-none rounded-bl-lg text-lg`}
                   >
-                    <Link href={"/login"}>Sign In</Link>
+                    <Link href={"/auth/login"}>Sign In</Link>
                   </Button>
                 </LoginButton>
               </div>

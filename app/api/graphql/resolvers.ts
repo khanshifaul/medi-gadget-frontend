@@ -221,6 +221,14 @@ export const resolvers = {
       });
     },
 
+    // Email Verification Queries
+    EmailVerificationToken: async (_: any, args: any, context: Context) => {
+      return await context.db.emailVerificationToken.findFirst({
+        where: { email: args.email },
+        orderBy: { createdAt: "desc" },
+      });
+    },
+
     // Blog posts Queries
     blogPosts: async (_: any, __: any, context: Context) => {
       return await context.db.blogPost.findMany();

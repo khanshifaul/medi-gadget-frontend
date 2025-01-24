@@ -423,6 +423,9 @@ type Query {
   # TwoFactor Confirmation Queries
   TwoFactorConfirmation(id: String!): TwoFactorConfirmation
 
+  # EmailVerificationToken Queries
+  EmailVerificationToken(email: String!): EmailVerificationToken
+
   # BlogPost Queries
   blogPosts: [BlogPost!]
   blogPost(id: ID!): BlogPost
