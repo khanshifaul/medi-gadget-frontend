@@ -2,57 +2,32 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useState } from "react";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { MdEdit } from "react-icons/md";
-
 interface Props {
-  Id: string;
-  item: string;
-  onEdit: (id: string) => void;
-  prefetchAction: () => void;
-  EditForm?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-const EditDialog = ({ Id, onEdit, prefetchAction, EditForm }: Props) => {
-  const [isPending, setIsPending] = useState(false);
-
-  const handleEdit = () => {
-    setIsPending(true);
-    onEdit(Id);
-    setIsPending(false);
-    prefetchAction();
-  };
-
+const EditDialog = ({ children }: Props) => {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Sheet>
+      <SheetTrigger asChild>
         <Button variant="none">
           <MdEdit className="text-2xl" />
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit</DialogTitle>
-        </DialogHeader>
-        <div>{EditForm}</div>
-        <DialogFooter className="flex gap-2">
-          <DialogClose asChild>
-            <Button type="button">Cancel</Button>
-          </DialogClose>
-          <Button disabled={isPending} onClick={handleEdit} type="button">
-            Save
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </SheetTrigger>
+      <SheetContent className="md:min-w-[50vw] min-w-[100vw] overflow-scroll">
+        <SheetHeader>
+          <SheetTitle>Edit</SheetTitle>
+        </SheetHeader>
+        <div>{children}</div>
+      </SheetContent>
+    </Sheet>
   );
 };
 

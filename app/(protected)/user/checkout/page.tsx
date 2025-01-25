@@ -70,6 +70,17 @@ const Checkout = () => {
       return;
     }
 
+    const selectedAddress = userAddresses.find(
+      (address) => address.id === selectedAddressId
+    );
+
+    if (!selectedAddress) {
+      toast.error("Selected address not found.");
+      return;
+    }
+
+    const fullAddress = `${selectedAddress.address1}, ${selectedAddress.address2}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.postcode}, ${selectedAddress.country}`;
+
     const items = cartItems.map((item) => ({
       productId: item.id,
       quantity: item.quantity,
@@ -81,7 +92,7 @@ const Checkout = () => {
         variables: {
           input: {
             userId: user?.id,
-            deliveryAddress: selectedAddressId,
+            deliveryAddress: fullAddress,
             paymentMethod: selectedPaymentMethod,
             items,
             discountAmount: 0,
@@ -145,9 +156,9 @@ const Checkout = () => {
                                 {address.type}
                               </Label>
                               <p className="text-muted-foreground">
-                                {address.address1}, {address.address2},{" "}
-                                {address.city}, {address.state},{" "}
-                                {address.country}
+                                {address.address1}, {address.address2},
+                                {address.city}, {address.state},
+                                {address.postcode}, {address.country}
                               </p>
                             </div>
                           </div>

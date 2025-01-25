@@ -17,6 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import EditProductForm from "./edit-product-form";
 
 const ProductTable = () => {
   const router = useRouter();
@@ -37,11 +38,6 @@ const ProductTable = () => {
   }
 
   const products: IProduct[] = data?.Products || [];
-
-  const handleEdit = (id: string) => {
-    console.log(`Editing product with id: ${id}`);
-    // Navigate to an edit page or update the state here
-  };
 
   const handleDelete = (id: string) => {
     console.log(`Deleting product with id: ${id}`);
@@ -131,13 +127,9 @@ const ProductTable = () => {
                   {new Date(product.updatedAt).toUTCString()}
                 </TableCell>
                 <TableCell className="px-3">
-                  <EditDialog
-                    Id={product.id}
-                    item="product"
-                    onEdit={handleEdit}
-                    prefetchAction={prefetchAction}
-                    EditForm={() => <div>Edit Form</div>}
-                  />
+                  <EditDialog>
+                    <EditProductForm product={product} />
+                  </EditDialog>
                 </TableCell>
                 <TableCell className="px-3">
                   <DeleteDialog

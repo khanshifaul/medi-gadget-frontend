@@ -68,6 +68,31 @@ export const ADD_PRODUCT = gql`
   }
 `;
 
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct(
+    $updateProductId: String!
+    $input: UpdateProductInput!
+  ) {
+    updateProduct(id: $updateProductId, input: $input) {
+      id
+      name
+      sku
+      images
+      detailsImages
+      regularPrice
+      discount
+      offerPrice
+      stock
+      status
+      tags
+      details
+      createdAt
+      updatedAt
+      flexibleData
+    }
+  }
+`;
+
 export const DELETE_PRODUCT = gql`
   mutation DeleteProduct($deleteProductId: String!) {
     deleteProduct(id: $deleteProductId)

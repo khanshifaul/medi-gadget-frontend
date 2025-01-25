@@ -1,6 +1,14 @@
 "use client";
 import { DELETE_ORDER } from "@/app/api/graphql/mutation";
 import { GET_ORDERS } from "@/app/api/graphql/queries";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { IOrder, IOrderItem } from "@/types";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
@@ -38,37 +46,43 @@ const OrderTable: React.FC = () => {
   }
 
   return (
-    <table className="min-w-full light:bg-white">
-      <thead>
-        <tr>
-          <th className="py-2">Sl.</th>
-          <th className="py-2">User Details</th>
-          <th className="py-2">Delivery Address</th>
-          <th className="py-2">Payment Method</th>
-          <th className="py-2">Order Status</th>
-          <th className="py-2">Total Payable</th>
-          <th className="py-2">Items</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table className="w-full">
+      <TableHeader>
+        <TableRow>
+          <TableHead className="py-2">Sl.</TableHead>
+          <TableHead className="py-2">User Details</TableHead>
+          <TableHead className="py-2">Delivery Address</TableHead>
+          <TableHead className="py-2">Payment Method</TableHead>
+          <TableHead className="py-2">Order Status</TableHead>
+          <TableHead className="py-2">Total Payable</TableHead>
+          <TableHead className="py-2">Items</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {loading ? (
-          <tr>
-            <td colSpan={7} className="text-center py-4">
+          <TableRow>
+            <TableCell colSpan={7} className="text-center py-4">
               Loading...
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         ) : null}
         {orders.map((order, index) => (
-          <tr key={order.id}>
-            <td className="border px-4 py-2">{index + 1}</td>
-            <td className="border px-4 py-2">{order.user.name}</td>
-            <td className="border px-4 py-2">{order.deliveryAddress}</td>
-            <td className="border px-4 py-2">{order.paymentMethod}</td>
-            <td className="border px-4 py-2">{order.status}</td>
-            <td className="border px-4 py-2">
+          <TableRow key={order.id}>
+            <TableCell className="border px-4 py-2">{index + 1}</TableCell>
+            <TableCell className="border px-4 py-2">
+              {order.user.name}
+            </TableCell>
+            <TableCell className="border px-4 py-2">
+              {order.deliveryAddress}
+            </TableCell>
+            <TableCell className="border px-4 py-2">
+              {order.paymentMethod}
+            </TableCell>
+            <TableCell className="border px-4 py-2">{order.status}</TableCell>
+            <TableCell className="border px-4 py-2">
               {order.totalPayable.toFixed(2)}
-            </td>
-            <td className="border px-4 py-2">
+            </TableCell>
+            <TableCell className="border px-4 py-2">
               <ul>
                 {order.items.map((item: IOrderItem, index) => (
                   <li key={index}>
@@ -77,19 +91,19 @@ const OrderTable: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </td>
-            <td className="border px-4 py-2">
+            </TableCell>
+            <TableCell className="border px-4 py-2">
               <DeleteDialog
                 Id={order.id}
                 item="order"
                 onDelete={handleDelete}
                 prefetchAction={prefetchAction}
               />
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 };
 

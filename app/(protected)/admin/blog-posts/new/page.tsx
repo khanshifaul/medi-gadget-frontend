@@ -1,4 +1,4 @@
-import NewBlogPostForm from "@/components/protected/admin/blogpost-form";
+import NewBlogPostForm from "@/components/protected/admin/create-blogpost-form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

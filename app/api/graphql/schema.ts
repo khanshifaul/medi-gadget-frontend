@@ -359,7 +359,7 @@ type NewsletterSubscriber {
 }
 # BlogPost Model
 type BlogPost {
-  id: ID!
+  id: String!
   title: String!
   content: String!
   thumbnail: String!
@@ -381,11 +381,11 @@ type Query {
   Products: [Product!]!
   
   # ProductCategory
-  productCategory(id: ID!): ProductCategory
+  productCategory(id: String!): ProductCategory
   productCategories: [ProductCategory!]!
   
   # ProductSubCategory
-  productSubCategory(id: ID!): ProductSubCategory
+  productSubCategory(id: String!): ProductSubCategory
   productSubCategories: [ProductSubCategory!]!
   
   # Order Queries
@@ -428,7 +428,7 @@ type Query {
 
   # BlogPost Queries
   blogPosts: [BlogPost!]
-  blogPost(id: ID!): BlogPost
+  blogPost(id: String!): BlogPost
 }
 
 input OrderItemInput {
@@ -447,6 +447,34 @@ input AddOrderInput {
   deliveryCharge: Float!
   notes: String
 }
+
+input ProductCategoryInput {
+  id: String!
+  name: String
+}
+
+input ProductSubCategoryInput {
+  id: String!
+  name: String
+}
+
+input UpdateProductInput {
+  name: String
+  sku: String
+  images: [String!]
+  detailsImages: [String!]
+  regularPrice: Float
+  discount: Float
+  offerPrice: Float
+  stock: Int
+  status: ProductStatus
+  tags: [String!]
+  details: String
+  categoryId: String
+  subcategoryId: String
+  flexibleData: JSON
+}
+
 
 
 type Mutation {
@@ -473,8 +501,7 @@ type Mutation {
   # Product Mutations
   addProduct(name: String!, sku: String!, images: [String!], detailsImages: [String!], regularPrice: Float!, discount: Float!, offerPrice: Float!, stock: Int!, status: ProductStatus, tags: [String!], details: String, categoryId: String!, subcategoryId: String!, flexibleData: JSON): Product
   
-  updateProduct( id: String!, name: String, sku: String, images: [String!], detailsImages: [String!], regularPrice: Float, discount: Float, offerPrice: Float, stock: Int, status: ProductStatus, tags: [String!], details: String, categoryId: String, subcategoryId: String, flexibleData: JSON): Product
-
+  updateProduct(id: String!, input: UpdateProductInput!): Product!
   deleteProduct(id: String!): Boolean
 
   # Cart Mutations
@@ -505,7 +532,7 @@ type Mutation {
 
   # BlogPost Mutations
   addBlogPost(title: String!, content: String!, thumbnail: String!): BlogPost
-  updateBlogPost(id: ID!, title: String, content: String, thumbnail: String): BlogPost
-  deleteBlogPost(id: ID!): BlogPost
+  updateBlogPost(id: String!, title: String, content: String, thumbnail: String): BlogPost
+  deleteBlogPost(id: String!): BlogPost
 
 }`;

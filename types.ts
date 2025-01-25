@@ -192,8 +192,8 @@ export interface IUserAddress extends UserAddress {
   type: UserAddressType;
   address1: string;
   address2: string;
-  state: string;
   city: string;
+  state: string;
   postcode: number;
   country: string;
 }

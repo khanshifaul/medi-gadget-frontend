@@ -114,13 +114,13 @@ const NewProductForm = () => {
       let formattedValue: string | number | string[];
 
       if (name === "regularPrice" || name === "offerPrice") {
-        formattedValue = parseFloat(value); // Ensure it's a number
+        formattedValue = parseFloat(value);
       } else if (name === "discount" || name === "stock") {
-        formattedValue = parseInt(value, 10); // Ensure it's an integer
+        formattedValue = parseInt(value, 10);
       } else if (name === "tags") {
         formattedValue = value.split(",").map((tag) => tag.trim());
       } else {
-        formattedValue = value; // Default to string for other fields
+        formattedValue = value;
       }
 
       return {

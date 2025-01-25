@@ -316,7 +316,7 @@ export const GET_BLOGPOSTS = gql`
   }
 `;
 export const GET_BLOGPOST = gql`
-  query BlogPost($blogPostId: ID!) {
+  query BlogPost($blogPostId: String!) {
     blogPost(id: $blogPostId) {
       id
       title

@@ -56,7 +56,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ role }) => {
         <Logo />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="flex flex-col gap-2">
           {navData.map((link, index) => {
             const Icon = link.icon;
             return (

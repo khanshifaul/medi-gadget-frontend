@@ -388,24 +388,75 @@ export const resolvers = {
       });
     },
     updateProduct: async (_: any, args: any, context: Context) => {
-      return await context.db.product.update({
-        where: { id: args.id },
-        data: {
-          name: args.name,
-          sku: args.sku,
-          images: args.images,
-          detailsImages: args.detailsImages,
-          regularPrice: args.regularPrice,
-          discount: args.discount,
-          offerPrice: args.offerPrice,
-          stock: args.stock,
-          status: args.status,
-          tags: args.tags,
-          details: args.details,
-          flexibleData: args.flexibleData,
+      const {
+        id,
+        input: {
+          name,
+          sku,
+          images,
+          detailsImages,
+          regularPrice,
+          discount,
+          offerPrice,
+          stock,
+          status,
+          tags,
+          details,
+          flexibleData,
+          categoryId,
+          subcategoryId,
         },
-      });
+      } = args;
+
+      try {
+        // Validate required fields
+        if (!id) {
+          throw new Error("Product ID is required.");
+        }
+        if (!categoryId) {
+          throw new Error("Category ID is required.");
+        }
+        if (!subcategoryId) {
+          throw new Error("Subcategory ID is required.");
+        }
+
+        // Validate numerical fields
+        if (regularPrice < 0 || discount < 0 || offerPrice < 0 || stock < 0) {
+          throw new Error("Price and stock values must be non-negative.");
+        }
+
+        // Perform the update
+        const updatedProduct = await context.db.product.update({
+          where: { id },
+          data: {
+            name,
+            sku,
+            images,
+            detailsImages,
+            regularPrice,
+            discount,
+            offerPrice,
+            stock,
+            status,
+            tags,
+            details,
+            flexibleData,
+            category: {
+              connect: { id: categoryId },
+            },
+            subcategory: {
+              connect: { id: subcategoryId },
+            },
+          },
+        });
+
+        return updatedProduct;
+      } catch (error) {
+        console.error("Error updating product:", error);
+        throw new Error("Failed to update product. Please try again.");
+      }
     },
+
     deleteProduct: async (_: any, args: any, context: Context) => {
       await context.db.product.delete({
         where: { id: args.id },
@@ -469,7 +520,6 @@ export const resolvers = {
       return true;
     },
 
-    // Order Mutations
     // Order Mutations
     addOrder: async (_: any, args: any, context: Context) => {
       const {
