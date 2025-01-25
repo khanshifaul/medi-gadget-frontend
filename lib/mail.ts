@@ -63,7 +63,6 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/new-verification?token=${token}`;
-  console.log(confirmLink);
 
   await transporter.sendMail({
     // await resend.emails.send({

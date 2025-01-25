@@ -26,7 +26,6 @@ import { GrCompare } from "react-icons/gr";
 
 const CompareBtn = () => {
   const compareItemIds = useAppSelector(selectCompareItemIds);
-  console.log(compareItemIds);
 
   // Fetch product data for each product ID
   const { data, loading, error } = useQuery(GET_PRODUCT, {
@@ -36,7 +35,6 @@ const CompareBtn = () => {
 
   // Store product data in an array
   const productArray = data ? [data.Product] : [];
-  console.log(productArray);
 
   return (
     <div>

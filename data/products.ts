@@ -11,7 +11,6 @@ export const getProducts = cache(async () => {
         subcategory: true,
       },
     });
-    console.log("Fetched products:", products);
     return products;
   } catch (error) {
     // Type assertion to Error

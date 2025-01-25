@@ -1,6 +1,7 @@
 "use client";
 import { GET_BLOGPOSTS } from "@/app/api/graphql/queries";
 import BlogCard from "@/components/common/blog/blog-card";
+import PageBanner from "@/components/common/page-banner";
 import { IBlogPost } from "@/types";
 import { useQuery } from "@apollo/client";
 
@@ -23,8 +24,8 @@ const BlogPage = () => {
 
   return (
     <div className="md:container mx-auto px-4">
-      <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Blog</h1>
-      <div className="flex flex-col gap-4">
+      <PageBanner title="Blog" />
+      <div className="flex flex-col gap-4 py-4">
         {blogs.map((blog) => (
           <BlogCard
             key={blog.id}

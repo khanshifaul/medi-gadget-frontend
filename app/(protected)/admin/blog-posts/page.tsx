@@ -7,7 +7,7 @@ import Link from "next/link";
 const BlogPosts = async () => {
   return (
     <div>
-      <PageTitle title="Products">
+      <PageTitle title="Blog Posts">
         <div className="flex gap-2">
           <RefreshBtn />
           <Button size={"sm"}>

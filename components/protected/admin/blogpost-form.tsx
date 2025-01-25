@@ -29,14 +29,13 @@ const NewBlogPostForm = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const { data } = await addBlogPost({
+      await addBlogPost({
         variables: {
           title,
           content: markdownContent,
           thumbnail,
         },
       });
-      console.log("Blog post added:", data);
       // Optionally reset the form
       setTitle("");
       setMarkdownContent("");

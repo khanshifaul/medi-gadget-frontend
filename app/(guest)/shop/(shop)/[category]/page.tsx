@@ -10,12 +10,10 @@ import { useParams } from "next/navigation";
 import { Suspense } from "react";
 const CategoryPage = () => {
   const param = useParams();
-  console.log(param.category);
 
   // Fetch all products using the GET_PRODUCTS query
   const { data, loading, error } = useQuery(GET_PRODUCTS);
   const products: IProduct[] = data?.Products || [];
-  console.log(products);
 
   // Decode the category from URL params
   const categoryFromParams = param.category
@@ -27,7 +25,6 @@ const CategoryPage = () => {
   const decodedCategory = categoryFromParams
     ? decodeURIComponent(categoryFromParams)
     : null;
-  console.log(decodedCategory); // This should now print the decoded category name
 
   // Filter the products based on the category from the URL
   const filteredProducts = products.filter(

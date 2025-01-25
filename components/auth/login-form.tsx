@@ -39,23 +39,21 @@ export const LoginForm = () => {
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     startTransition(() => {
-      login(values, callbackUrl)
-        .then((data) => {
-          if (data?.error) {
-            form.reset();
-            toast.error(data.error); // Use toast for error
-          }
+      login(values, callbackUrl).then((data) => {
+        if (data?.error) {
+          form.reset();
+          toast.error(data.error);
+        }
 
-          if (data?.success) {
-            form.reset();
-            toast.success(data.success); // Use toast for success
-          }
+        if (data?.success) {
+          form.reset();
+          toast.success(data.success);
+        }
 
-          if (data?.twoFactor) {
-            setShowTwoFactor(true);
-          }
-        })
-        .catch(() => toast.error("Something went wrong")); // Use toast for error
+        if (data?.twoFactor) {
+          setShowTwoFactor(true);
+        }
+      });
     });
 
     startTransition(() => {
@@ -63,7 +61,7 @@ export const LoginForm = () => {
         const success = true;
         if (success) {
           toast.success("Login successful!");
-          router.push("/");
+          router.push("/auth/login");
         } else {
           toast.error("Login failed.");
         }

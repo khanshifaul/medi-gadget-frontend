@@ -74,7 +74,7 @@ const BlogPostTable = () => {
                     item="Blog Post"
                     onEdit={handleEdit}
                     prefetchAction={prefetchAction}
-                    EditForm={() => <div>Edit Form</div>}
+                    EditForm={<div>Edit Form</div>}
                   />
                 </td>
                 <td className="p-2 text-center">

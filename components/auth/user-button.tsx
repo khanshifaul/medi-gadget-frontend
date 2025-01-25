@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCurrentUser } from "@/lib/hooks";
-import { CircleUserRound, Cog, LogOut } from "lucide-react"; // Import icons from lucide-react
+import { CircleUserRound, Cog, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export const UserButton = () => {

@@ -10,8 +10,8 @@ interface PolicyContent {
 
 const PolicyContent = ({ content }: { content: PolicyContent }) => {
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-3xl font-bold mb-4">{content.title}</h1>
+    <div className="w-full container mx-auto p-6 light:bg-white shadow-md rounded-lg">
+      <h1 className="text-3xl font-bold mb-4 border-b-2">{content.title}</h1>
       {content.sections.map((section, index) => (
         <div key={index} className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">{section.heading}</h2>

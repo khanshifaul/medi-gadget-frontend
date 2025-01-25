@@ -15,6 +15,7 @@ import { IUser, IUserAddress } from "@/types";
 import { useMutation, useQuery } from "@apollo/client";
 import { Plus } from "lucide-react";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { Input } from "../ui/input";
 
 export enum UserAddressType {
@@ -168,10 +169,14 @@ export const UserProfile = () => {
           ...formData,
         },
       });
-      console.log("User info updated successfully");
+      toast.success("User info updated successfully");
       setIsEditingInfo(false);
     } catch (error) {
-      console.error("Error updating user info:", error);
+      if (error instanceof Error) {
+        toast.error(`Error updating user info: ${error.message}`);
+      } else {
+        toast.error("An unknown error occurred while updating user info");
+      }
     }
   };
 
@@ -206,10 +211,14 @@ export const UserProfile = () => {
           }
         })
       );
-      console.log("User addresses updated successfully");
+      toast.success("User addresses updated successfully");
       setIsEditingAddresses(false);
     } catch (error) {
-      console.error("Error updating user addresses:", error);
+      if (error instanceof Error) {
+        toast.error(`Error updating user addresses: ${error.message}`);
+      } else {
+        toast.error("An unknown error occurred while updating user addresses");
+      }
     }
   };
 

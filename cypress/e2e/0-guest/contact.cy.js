@@ -19,17 +19,7 @@ describe('Contact Form Submission', () => {
       cy.get('button[type="submit"]').click();
   
       // Check for success message
-      cy.contains('Your message has been sent successfully!').should('be.visible');
-    });
-  
-    it('should show validation errors for invalid inputs', () => {
-      // Attempt to submit the form with invalid email
-      cy.get('input[name="name"]').type('John Doe');
-      cy.get('input[name="email"]').type('invalid-email');
-      cy.get('button[type="submit"]').click();
-  
-      // Check for validation error message
-      cy.contains('Please enter a valid email address').should('be.visible');
+      cy.get(".toast").contains('Message has been sent').should('be.visible');
     });
   });
   

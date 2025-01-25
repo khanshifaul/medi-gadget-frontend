@@ -37,20 +37,21 @@ export const getUserLength = cache(async (): Promise<number> => {
   }
 });
 
-export const getVerificationTokenLength = cache(async (): Promise<number> => {
+// Get the number of categories
+export const getCategoryLength = cache(async (): Promise<number> => {
   try {
-    const verificationTokenCount = await db.emailVerificationToken.count();
-    return verificationTokenCount;
+    const categoryCount = await db.productCategory.count();
+    return categoryCount;
   } catch (error) {
     throw error;
   }
 });
 
-export const getPasswordResetTokenLength = cache(async () => {
+export const getOrderLength = cache(async (): Promise<number> => {
   try {
-    const passwordResetTokenCount = await db.passwordResetToken.count();
-    return passwordResetTokenCount;
+    const orderCount = await db.order.count();
+    return orderCount;
   } catch (error) {
-    return error;
+    throw error;
   }
 });

@@ -6,12 +6,12 @@ describe("User Registration", () => {
     cy.visit("/auth/register");
 
     cy.get('input[name="name"]').type("John Doe");
-    cy.get('input[name="email"]').type("john.doe@example.com");
+    cy.get('input[name="email"]').type("user@example.com");
     cy.get('input[name="password"]').type("password123");
     cy.get('input[name="confirmPassword"]').type("password123");
     cy.get('button[type="submit"]').click();
     cy.get(".toast")
-      .contains("Email already in use!" || "Email Verification Token Sent")
+      .contains("Confirmation email sent!")
       .should("be.visible");
   });
 });

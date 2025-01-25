@@ -21,7 +21,8 @@ export default defineConfig({
         },
       });
     },
-    baseUrl: process.env.CYPRESS_BASE_URL || "http://localhost:3000",
+    baseUrl:
+      process.env.CYPRESS_BASE_URL || "https://medi-gadget-iota.vercel.app/",
     reporter: "mochawesome",
     reporterOptions: {
       reportDir: "cypress/reports",

@@ -18,7 +18,7 @@ interface Props {
   item: string;
   onEdit: (id: string) => void;
   prefetchAction: () => void;
-  EditForm: React.ComponentType;
+  EditForm?: React.ReactNode;
 }
 
 const EditDialog = ({ Id, onEdit, prefetchAction, EditForm }: Props) => {
@@ -42,9 +42,7 @@ const EditDialog = ({ Id, onEdit, prefetchAction, EditForm }: Props) => {
         <DialogHeader>
           <DialogTitle>Edit</DialogTitle>
         </DialogHeader>
-        <div>
-          <EditForm />
-        </div>
+        <div>{EditForm}</div>
         <DialogFooter className="flex gap-2">
           <DialogClose asChild>
             <Button type="button">Cancel</Button>

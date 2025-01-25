@@ -47,7 +47,9 @@ export default auth(async (req) => {
       if (isAdmin) {
         return Response.redirect(new URL(ADMIN_LOGIN_REDIRECT, nextUrl));
       }
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      if (isUser) {
+        return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      }
     }
     return;
   }
