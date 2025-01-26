@@ -4,9 +4,9 @@ import { StoreProvider } from "@/components/store-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { siteMetadata } from "@/config/sites.config";
-import { SessionProvider } from "next-auth/react";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 import React from "react";
 import "./globals.css";
 
@@ -31,7 +31,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               enableSystem
               disableTransitionOnChange
             >
-              <StoreProvider>{children}</StoreProvider>
+              <StoreProvider>
+                {children}
+                <SpeedInsights />
+              </StoreProvider>
               <Toaster />
             </ThemeProvider>
           </Providers>

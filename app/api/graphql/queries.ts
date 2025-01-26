@@ -333,6 +333,7 @@ export const GET_ORDERS = gql`
     Orders {
       id
       user {
+        id
         name
         phoneNumber
         email
